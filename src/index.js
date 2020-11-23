@@ -287,7 +287,16 @@ class App extends Component {
               </div>
               <div className="orderBy">
                 <form>
-                  {/* TODO Insert here the order by select */}
+                <select
+                        name={this.state.username}
+                        value={this.state.listUsers}
+                        onChange={this.onSelectOrderBy}>
+                        <option value="nameDESC" >DESC</option>
+                        <option value="nameASC" >ASC</option>
+                        
+                    </select>
+
+                  
                 </form>
               </div>
               <div className="chatList">
@@ -297,13 +306,31 @@ class App extends Component {
                   .map((user,i) => {
                     
               
-                    return  <ChatPreview key={i}
-                    lastMessage={()=>this.createDirectMessageChat(user._id)}
-                    badge={user.avatarETag}
+                    return  <ChatPreview  key={i}
                     title={user.username}
+                    lastMessage={{
+                      message:
+                        this.state.rooms[user.username] &&
+                          this.state.rooms[user.username].lastMessage
+                          ? this.state.rooms[user.username].lastMessage.msg
+                          : '',
+                      time:
+                        this.state.rooms[user.username] &&
+                          this.state.rooms[user.username].lastMessage
+                          ? this.state.rooms[user.username].lastMessage.ts
+                          : ''
+                    }}
                     status={user.status}
-                    active={user.active}
-                    onClick={()=>{} }/>  
+                    active={
+                      this.state.activeUser.username === user.username
+                    }
+                    onClick={() => {
+                      this.createDirectMessageChat(user.username);
+                      this.setState({
+                        activeUser: user,
+                        messageValue: ''
+                      });
+                    }}/>  
 
                   })}
               </div>
