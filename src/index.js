@@ -21,7 +21,7 @@ class App extends Component {
     orderByValue: 'nameDESC'
   };
 
-  get searchUser() {
+   get searchUser () {
     return this.state.searchValue.length
       ? this.state.listUsers.filter(user =>
           user.username.includes(this.state.searchValue)
@@ -278,7 +278,7 @@ class App extends Component {
                 <span className={`userStatus ${this.state.userStatus}`} />
               </div>
               <div className="searchBoxContainer">
-                {/* TODO Insert here the search box */}
+                <SearchBox value={this.state.searchValue} onChange={()=>this.searchUser} onSubmit={()=>this.searchUser} />
               </div>
               <div className="orderBy">
                 <form>
@@ -288,9 +288,12 @@ class App extends Component {
               <div className="chatList">
                 {this.searchUser
                   .filter(user => user.username !== this.state.user)
-                  .map((user, i) => {
-                    {/* TODO Insert here the chat preview */}
-                    return null;
+                  
+                  .map((user,i) => {
+                  return <div key={i}>  {user}</div>
+                    
+                    // ChatPreview
+                    
                   })}
               </div>
             </div>

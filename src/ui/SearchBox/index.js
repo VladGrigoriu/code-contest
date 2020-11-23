@@ -5,7 +5,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
 library.add(faSearch);
-const noop = () => {}
+const noop = (prop) => {
+  prop.onChange()
+ 
+  
+  
+  
+}
 export const SearchContainer = styled.form`
   box-sizing: border-box;
   display: flex;
@@ -17,6 +23,7 @@ export const SearchContainer = styled.form`
   padding-left: 16px;
   padding-right: 16px;
 `;
+
 
 const IconContainer = styled.div`
   width: 18px;
@@ -48,6 +55,7 @@ export const SearchInput = styled.input`
 `;
 
 const SearchBox = ({ placeholder, value, onChange, onSubmit }) => (
+  
   <SearchContainer onSubmit={onSubmit} action="">
     <label aria-label="search" htmlFor="labChatSearchInput">
       <IconContainer>
