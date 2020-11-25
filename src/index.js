@@ -18,8 +18,10 @@ class App extends Component {
     activeUser: {},
     rooms: {},
     searchValue: '',
-    orderByValue: 'nameDESC'
+    orderByValue: 'nameDESC',
+    attachementValue:[{}]
   };
+  
 
    get searchUser () {
     return this.state.searchValue.length
@@ -46,6 +48,7 @@ class App extends Component {
   };
 
   callApiLogin = e => {
+    {console.log(this.state.listUsers)}
     e.preventDefault();
     console.log('login', this.state);
     return Api.login({
@@ -103,8 +106,8 @@ class App extends Component {
       });
   };
 
-  callApiPostMessage = e => {
-    e.preventDefault();
+  callApiPostMessage = () => {
+    // e.preventDefault();
     const { userId, messageValue: message, activeRoom } = this.state;
     this.setState({
       messageValue: ''
@@ -117,6 +120,8 @@ class App extends Component {
       .then(responseJson => {
         this.callApiRoomMessages(this.state.activeUser.username);
         this.createDirectMessageChat(this.state.activeUser.username);
+        
+
       })
       .catch(error => {
         console.error('Errore: ' + error);
@@ -218,6 +223,27 @@ class App extends Component {
     });
   };
 
+  onAttachClick = () =>{
+    const { userId, attachementValue: attachement, activeRoom } = this.state;
+    this.setState({
+      attachementValue: [{}]
+    });
+    Api.sendMessage({
+      userId,
+      attachement,
+      activeRoom
+    })
+      .then(responseJson => {
+        this.callApiRoomMessages(this.state.activeUser.username);
+        this.createDirectMessageChat(this.state.activeUser.username);
+        
+
+      })
+      .catch(error => {
+        console.error('Errore: ' + error);
+      });
+  }
+
   render() {
     return (
       <div className="Chat">
@@ -288,11 +314,11 @@ class App extends Component {
               <div className="orderBy">
                 <form>
                 <select
-                        name={this.state.username}
-                        value={this.state.listUsers}
-                        onChange={this.onSelectOrderBy}>
+                       value={this.state.orderByValue}
+                       onChange={e => this.onSelectOrderBy(e.target.value)}>
                         <option value="nameDESC" >DESC</option>
                         <option value="nameASC" >ASC</option>
+                        <option value="Status">Status</option>
                         
                     </select>
 
@@ -350,14 +376,25 @@ class App extends Component {
                 {this.state.rooms[this.state.activeUser.username] &&
                   this.state.rooms[this.state.activeUser.username].messages.map(
                     message => {
-                      {/* TODO Insert here the messages */}
-                      return null;
-                    }
-                  )}
+                      
+                      return   null
+                      // <Message message={message}/>
+                    })}
               </div>
               {this.state.activeUser.username && (
                 <div className="sendBoxContainer">
-                  {/* TODO Insert here the sendbox */}
+                  <SendBox placeholder={'inserisci il messaggio...'} value={this.state.messageValue} onChange={e => this.setState({ messageValue: e.target.value })}  
+                    onSubmit={e => {
+                    this.callApiPostMessage(this.state.messageValue)
+                    console.log('nuovoStato:', this.state) 
+                    e.preventDefault();}}
+                    
+                    // onAttachClick={ e => {this.onAttachClick(this.state.attachementValue) 
+                    // e.preventDefault();}}
+
+                  
+                    />
+                  {/* value={} onAttachClick={} onChange={} onMicClick={} onSubmit={} */}
                 </div>
               )}
             </div>
